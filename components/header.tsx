@@ -7,12 +7,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useCart } from "./cart-provider";
-
-export function Header() {
+import { signOut } from "@/app/login/actions";
+export function Header({ user }: { user: any }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartItems } = useCart();
   const cartItemCount = cartItems.length;
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container flex h-16 items-center px-4">
@@ -124,6 +123,17 @@ export function Header() {
               <span className="sr-only">Cart</span>
             </Button>
           </Link>
+          {user !== null ? (
+            <form action={signOut}>
+              <Button type="submit" variant="ghost" size="icon">
+                Sign Out
+              </Button>
+            </form>
+          ) : (
+            <Button asChild>
+              <Link href="/login">Sign In</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { FeaturedProducts } from "../components/featured-products";
-import { HeroSection } from "../components/hero-section";
-import { CategorySection } from "../components/category-section";
+import { HeroSection } from "@/components/hero-section";
+import { CategorySection } from "@/components/category-section";
+import { FeaturedProducts } from "@/components/featured-products";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (

@@ -3,15 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, ShoppingBag, Trash } from "lucide-react";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../components/ui/card";
-import { Separator } from "../../components/ui/separator";
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/components/cart-provider";
 
 export default function CartPage() {
