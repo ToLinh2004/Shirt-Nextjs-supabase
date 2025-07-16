@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useCart } from "./cart-provider";
-import { signOut } from "@/app/login/actions";
+import { signOut } from "@/app/(auth)/login/actions";
 export function Header({ user }: { user: any }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartItems } = useCart();

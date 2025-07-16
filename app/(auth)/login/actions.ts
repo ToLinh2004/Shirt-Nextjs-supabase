@@ -69,34 +69,14 @@ export async function oAuthSignIn(provider: Provider) {
 }
 
 
-
-export async function oAuthSignInWithGoogle(provider: Provider) {
-  if (!provider) {
-    return redirect("/login?message=No provider selected");
-  }
-
-  const supabase = await createClient();
-  const redirectUrl = getURL("/auth/callback-gg");
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider,
-    options: {
-      redirectTo: redirectUrl,
-    },
-  });
-
-  if (error) {
-    redirect("/login?message=Could not authenticate user");
-  }
-
-  return redirect(data.url);
-}
-
 export async function resetPassword(formData: FormData) {
   const supabase = await createClient();
 
   const email = formData.get("email") as string;
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/login/update-password",
+    redirectTo:
+      `${process.env.NEXT_DOMAIN_URl}/login/update-password` ||
+      "http://localhost:3000",
   });
 
   if (error) {
