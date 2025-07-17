@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Oswald, Playfair_Display } from "next/font/google";
+
+// Cấu hình font với next/font
+const oswald = Oswald({
   subsets: ["latin"],
+  variable: "--font-oswald",
+  weight: ["400", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
+  variable: "--font-playfair",
+  style: ["italic"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +31,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${oswald.variable} ${playfairDisplay.variable} antialiased`}
       >
         {children}
       </body>

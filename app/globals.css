@@ -119,4 +119,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  .ring {
+    transform-style: preserve-3d;
+  }
+  
+  .img {
+    transform-style: preserve-3d;
+    user-select: none;
+  }
+  
 }

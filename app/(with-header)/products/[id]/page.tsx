@@ -6,12 +6,7 @@ import Link from "next/link";
 import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/components/cart-provider";
 
 // Mock product data - in a real app, you would fetch this from an API
@@ -109,9 +104,11 @@ const products = [
     ],
   },
 ];
-
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const productId = Number.parseInt(params.id);
+// { params }: { params: { id: string } }
+export default function ProductPage() {
+  // const { id } = params;
+  const id='1';
+  const productId = Number.parseInt(id);
   const product = products.find((p) => p.id === productId);
 
   const [quantity, setQuantity] = useState(1);

@@ -57,8 +57,8 @@ export default function CartPage() {
                     <div className="flex-1">
                       <h3 className="font-medium">{item.name}</h3>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {item.selectedSize && `Size: ${item.selectedSize}`}
-                        {item.selectedColor && `, Color: ${item.selectedColor}`}
+                        {/* {item.selectedSize && `Size: ${item.selectedSize}`}
+                        {item.selectedColor && `, Color: ${item.selectedColor}`} */}
                       </p>
                       <p className="font-bold mt-1">${item.price.toFixed(2)}</p>
                     </div>

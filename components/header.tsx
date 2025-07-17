@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
+import { Menu, Search, ShoppingCart, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useCart } from "./cart-provider";
-import { signOut } from "@/app/(auth)/login/actions";
-export function Header({ user }: { user: any }) {
+import { Users } from "@/types/user";
+import AccountMenu from "@/components/account-menu";
+
+export function Header({ user }: { user: Users | null }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartItems } = useCart();
   const cartItemCount = cartItems.length;
@@ -101,19 +103,18 @@ export function Header({ user }: { user: any }) {
               variant="ghost"
               size="icon"
               onClick={() => setIsSearchOpen(true)}
+              className="cursor-pointer"
             >
               <Search className="h-5 w-5" />
               <span className="sr-only">Search</span>
             </Button>
           )}
-
-          <Button variant="ghost" size="icon">
-            <User className="h-5 w-5" />
-            <span className="sr-only">Account</span>
-          </Button>
-
           <Link href="/cart">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative cursor-pointer"
+            >
               <ShoppingCart className="h-5 w-5" />
               {cartItemCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
@@ -123,17 +124,7 @@ export function Header({ user }: { user: any }) {
               <span className="sr-only">Cart</span>
             </Button>
           </Link>
-          {user !== null ? (
-            <form action={signOut}>
-              <Button type="submit" variant="ghost" size="icon">
-                Sign Out
-              </Button>
-            </form>
-          ) : (
-            <Button asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
-          )}
+          {user !== null && <AccountMenu />}
         </div>
       </div>
     </header>
