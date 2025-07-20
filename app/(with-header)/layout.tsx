@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CartProvider } from "@/components/cart-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { createClient } from "@/utils/supabase/server";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 export const metadata: Metadata = {
   title: "Home | StyleHub",
@@ -14,10 +14,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
-
+console.log("uss",user)
   return (
     <CartProvider>
       <div className="flex flex-col min-h-screen">

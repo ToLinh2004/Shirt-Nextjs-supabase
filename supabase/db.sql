@@ -18,6 +18,8 @@ create table products (
   description text,
   category varchar,
   is_new boolean default false,
+   featured_image varchar,
+   quantity integer default 0,
   created_at timestamp default timezone('utc'::text, now()),
   updated_at timestamp default timezone('utc'::text, now())
 );
@@ -51,7 +53,6 @@ create table product_images (
   id serial primary key,
   product_id integer references products(id) on delete cascade,
   image_url varchar not null,
-  sort_order integer default 0
 );
 
 -- Bảng carts
@@ -70,7 +71,6 @@ create table cart_items (
   quantity integer not null,
   selected_size varchar,
   selected_color varchar,
-  price_snapshot decimal not null
 );
 
 -- Bảng orders

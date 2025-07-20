@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
@@ -8,112 +8,51 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/components/cart-provider";
+import { fetchProductDetail } from "@/app/hooks/useProducts";
+import { ProductDetail } from "@/types/product";
 
 // Mock product data - in a real app, you would fetch this from an API
-const products = [
-  {
-    id: 1,
-    name: "Classic White T-Shirt",
-    price: 29.99,
-    image: "/placeholder.svg?height=600&width=600",
-    category: "men",
-    isNew: true,
-    description:
-      "A timeless classic white t-shirt made from 100% organic cotton. Features a comfortable fit and durable construction that will last through countless washes.",
-    details: {
-      material: "100% Organic Cotton",
-      fit: "Regular",
-      care: "Machine wash cold, tumble dry low",
-      origin: "Ethically made in Portugal",
-    },
-    sizes: ["XS", "S", "M", "L", "XL"],
-    colors: ["White", "Black", "Gray"],
-    images: [
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-    ],
-  },
-  {
-    id: 2,
-    name: "Slim Fit Jeans",
-    price: 59.99,
-    image: "/placeholder.svg?height=600&width=600",
-    category: "men",
-    isNew: false,
-    description:
-      "Modern slim fit jeans with a slight stretch for comfort. Features a classic five-pocket design and a versatile mid-wash that pairs well with anything.",
-    details: {
-      material: "98% Cotton, 2% Elastane",
-      fit: "Slim",
-      care: "Machine wash cold, inside out",
-      origin: "Made in Turkey",
-    },
-    sizes: ["28", "30", "32", "34", "36"],
-    colors: ["Blue", "Black", "Gray"],
-    images: [
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-    ],
-  },
-  {
-    id: 3,
-    name: "Summer Floral Dress",
-    price: 79.99,
-    image: "/placeholder.svg?height=600&width=600",
-    category: "women",
-    isNew: true,
-    description:
-      "A lightweight floral dress perfect for summer days. Features a flattering silhouette with a flowy skirt and adjustable straps.",
-    details: {
-      material: "100% Viscose",
-      fit: "Regular",
-      care: "Hand wash cold, line dry",
-      origin: "Made in India",
-    },
-    sizes: ["XS", "S", "M", "L", "XL"],
-    colors: ["Floral Print", "Blue", "White"],
-    images: [
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-    ],
-  },
-  {
-    id: 4,
-    name: "Casual Hoodie",
-    price: 49.99,
-    image: "/placeholder.svg?height=600&width=600",
-    category: "men",
-    isNew: false,
-    description:
-      "A comfortable casual hoodie perfect for everyday wear. Features a soft fleece lining and a relaxed fit for maximum comfort.",
-    details: {
-      material: "80% Cotton, 20% Polyester",
-      fit: "Relaxed",
-      care: "Machine wash cold, tumble dry low",
-      origin: "Made in Vietnam",
-    },
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Gray", "Black", "Navy"],
-    images: [
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-    ],
-  },
-];
-// { params }: { params: { id: string } }
-export default function ProductPage() {
-  // const { id } = params;
-  const id='1';
-  const productId = Number.parseInt(id);
-  const product = products.find((p) => p.id === productId);
+// const products = [
+//   {
+//     id: 1,
+//     name: "Classic White T-Shirt",
+//     price: 29.99,
+//     image: "/placeholder.svg?height=600&width=600",
+//     category: "men",
+//     isNew: true,
+//     description:
+//       "A timeless classic white t-shirt made from 100% organic cotton. Features a comfortable fit and durable construction that will last through countless washes.",
+//     details: {
+//       material: "100% Organic Cotton",
+//       fit: "Regular",
+//       care: "Machine wash cold, tumble dry low",
+//       origin: "Ethically made in Portugal",
+//     },
+//     sizes: ["XS", "S", "M", "L", "XL"],
+//     colors: ["White", "Black", "Gray"],
+//     images: [
+//       "/placeholder.svg?height=600&width=600",
+//       "/placeholder.svg?height=600&width=600",
+//       "/placeholder.svg?height=600&width=600",
+//     ],
+//   },
+// ];
+export default  function ProductPage({ params }: { params: Promise<{ id: number }> }) {
+   const { id } = use(params);
+ const [product, setProduct] = useState<ProductDetail | null>(null);
+
+ useEffect(() => {
+   const getDetail = async () => {
+     const result = await fetchProductDetail(id);
+     setProduct(result);
+   };
+   getDetail();
+ }, [id]);
+  console.log("đa", product);
 
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState(0);
 
   const { addToCart } = useCart();
@@ -159,18 +98,21 @@ export default function ProductPage() {
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-lg border">
             <Image
-              src={product.images[selectedImage] || "/placeholder.svg"}
+              src={
+                product.product_images?.[selectedImage]?.image_url ||
+                "/placeholder.svg"
+              }
               alt={product.name}
               fill
               className="object-cover"
             />
-            {product.isNew && (
+            {product.is_new && (
               <Badge className="absolute top-4 right-4">New</Badge>
             )}
           </div>
 
           <div className="flex gap-4">
-            {product.images.map((image, index) => (
+            {product.product_images?.map((image, index) => (
               <button
                 key={index}
                 className={`relative aspect-square w-20 overflow-hidden rounded-md border ${
@@ -179,7 +121,7 @@ export default function ProductPage() {
                 onClick={() => setSelectedImage(index)}
               >
                 <Image
-                  src={image || "/placeholder.svg"}
+                  src={image.image_url || "/placeholder.svg"}
                   alt={`${product.name} - Image ${index + 1}`}
                   fill
                   className="object-cover"
@@ -203,14 +145,14 @@ export default function ProductPage() {
             <div>
               <h3 className="font-medium mb-2">Size</h3>
               <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
+                {product.product_sizes?.map((size) => (
                   <Button
-                    key={size}
-                    variant={selectedSize === size ? "default" : "outline"}
-                    className="min-w-[60px]"
-                    onClick={() => setSelectedSize(size)}
+                    key={size.id}
+                    variant={selectedSize === size.size ? "default" : "outline"}
+                    className="min-w-[60px] cursor-pointer"
+                    onClick={() => setSelectedSize(size.size)}
                   >
-                    {size}
+                    {size.size}
                   </Button>
                 ))}
               </div>
@@ -224,14 +166,27 @@ export default function ProductPage() {
             <div>
               <h3 className="font-medium mb-2">Color</h3>
               <div className="flex flex-wrap gap-2">
-                {product.colors.map((color) => (
+                {product.product_images?.map((color) => (
                   <Button
-                    key={color}
-                    variant={selectedColor === color ? "default" : "outline"}
-                    className="min-w-[80px]"
-                    onClick={() => setSelectedColor(color)}
+                    key={color.id}
+                    variant={
+                      selectedColor === color.color ? "default" : "outline"
+                    }
+                    className="min-w-[80px] cursor-pointer "
+                    onClick={() => {
+                      setSelectedColor(color?.color || "");
+
+                      // Tìm vị trí (index) của ảnh có màu đó trong danh sách images
+                      const index = product.product_images?.findIndex(
+                        (img) => img.color === color.color
+                      );
+
+                      if (index !== undefined && index >= 0) {
+                        setSelectedImage(index);
+                      }
+                    }}
                   >
-                    {color}
+                    {color.color}
                   </Button>
                 ))}
               </div>
@@ -249,6 +204,7 @@ export default function ProductPage() {
                   variant="outline"
                   size="icon"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="cursor-pointer"
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -257,6 +213,7 @@ export default function ProductPage() {
                   variant="outline"
                   size="icon"
                   onClick={() => setQuantity(quantity + 1)}
+                  className="cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -270,16 +227,16 @@ export default function ProductPage() {
             disabled={!selectedSize || !selectedColor}
             onClick={handleAddToCart}
           >
-            <ShoppingCart className="h-5 w-5 mr-2" />
+            <ShoppingCart className="h-5 w-5 mr-2 cursor-pointer" />
             Add to Cart
           </Button>
 
           <Tabs defaultValue="details">
             <TabsList className="w-full">
-              <TabsTrigger value="details" className="flex-1">
+              <TabsTrigger value="details" className="flex-1 cursor-pointer">
                 Details
               </TabsTrigger>
-              <TabsTrigger value="shipping" className="flex-1">
+              <TabsTrigger value="shipping" className="flex-1 cursor-pointer">
                 Shipping & Returns
               </TabsTrigger>
             </TabsList>
@@ -288,25 +245,25 @@ export default function ProductPage() {
                 <div>
                   <h4 className="font-medium">Material</h4>
                   <p className="text-sm text-muted-foreground">
-                    {product.details.material}
+                    {product?.material}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-medium">Fit</h4>
                   <p className="text-sm text-muted-foreground">
-                    {product.details.fit}
+                    {product?.fit}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-medium">Care</h4>
                   <p className="text-sm text-muted-foreground">
-                    {product.details.care}
+                    {product?.care}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-medium">Origin</h4>
                   <p className="text-sm text-muted-foreground">
-                    {product.details.origin}
+                    {product?.origin}
                   </p>
                 </div>
               </div>

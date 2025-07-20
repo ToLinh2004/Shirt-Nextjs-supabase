@@ -1,18 +1,19 @@
 "use client";
 
+import { Product } from "@/types/product";
 import type React from "react";
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  isNew: boolean;
-  quantity?: number;
-};
+// type Product = {
+//   id: number;
+//   name: string;
+//   price: number;
+//   image: string;
+//   category: string;
+//   isNew: boolean;
+//   quantity?: number;
+// };
 
 type CartContextType = {
   cartItems: Product[];
